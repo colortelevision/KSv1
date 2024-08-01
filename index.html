@@ -1,248 +1,316 @@
-<html><head><base href="https://colortelevision.github.io/">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Windows 98 Virtual Desktop</title>
-<link rel="stylesheet" href="https://unpkg.com/98.css">
-<style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-  }
-  #desktop {
-    background-color: #008080;
-    height: 100vh;
-    position: relative;
-  }
-  .icon {
-    width: 75px;
-    text-align: center;
-    color: white;
-    position: absolute;
-    cursor: pointer;
-  }
-  .icon img {
-    width: 32px;
-    height: 32px;
-  }
-  .window {
-    position: absolute;
-    background-color: #c0c0c0;
-    border: 2px solid #dfdfdf;
-    box-shadow: inset -2px -2px #0a0a0a, inset 2px 2px #fff;
-    resize: both;
-    overflow: auto;
-  }
-  .window-header {
-    background: linear-gradient(90deg, navy, #1084d0);
-    padding: 3px 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-  }
-  .window-content {
-    padding: 10px;
-    height: calc(100% - 40px);
-    box-sizing: border-box;
-  }
-  .window h3 {
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  margin-bottom: 10px;
-  }
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-  #taskbar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #c0c0c0;
-    padding: 2px;
-    display: flex;
-    border-top: 2px solid #fff;
-  }
-  .taskbar-item {
-    padding: 2px 5px;
-    margin-right: 5px;
-    background-color: #c0c0c0;
-    border: 2px solid #fff;
-    border-bottom-color: #808080;
-    border-right-color: #808080;
-  }
-  .title-bar {
-  background: linear-gradient(90deg, navy, #1084d0);
-  padding: 3px 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: white;
-}
+<html>
+    <head>
+        <base href="https://colortelevision.github.io/" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Windows 98 Virtual Desktop</title>
+        <link rel="stylesheet" href="https://unpkg.com/98.css" />
+        <style>
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                overflow: hidden;
+                font-family: Arial, sans-serif;
+            }
+            #desktop {
+                background-color: #008080;
+                height: 100vh;
+                position: relative;
+            }
+            .icon {
+                width: 75px;
+                text-align: center;
+                color: white;
+                position: absolute;
+                cursor: pointer;
+            }
+            .icon img {
+                width: 32px;
+                height: 32px;
+            }
+            .window {
+                position: absolute;
+                background-color: #c0c0c0;
+                border: 2px solid #dfdfdf;
+                box-shadow:
+                    inset -2px -2px #0a0a0a,
+                    inset 2px 2px #fff;
+                resize: both;
+                overflow: auto;
+            }
+            .window-header {
+                background: linear-gradient(90deg, navy, #1084d0);
+                padding: 3px 5px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: white;
+            }
+            .window-content {
+                padding: 10px;
+                height: calc(100% - 40px);
+                box-sizing: border-box;
+            }
+            .window h3 {
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+            iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+            #taskbar {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background-color: #c0c0c0;
+                padding: 2px;
+                display: flex;
+                border-top: 2px solid #fff;
+            }
+            .taskbar-item {
+                padding: 2px 5px;
+                margin-right: 5px;
+                background-color: #c0c0c0;
+                border: 2px solid #fff;
+                border-bottom-color: #808080;
+                border-right-color: #808080;
+            }
+            .title-bar {
+                background: linear-gradient(90deg, navy, #1084d0);
+                padding: 3px 5px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: white;
+            }
 
-.title-bar-controls {
-  display: flex;
-  align-items: center;
-}
+            .title-bar-controls {
+                display: flex;
+                align-items: center;
+            }
 
-.title-bar-controls button {
-  width: 24px;
-  height: 24px;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-}
+            .title-bar-controls button {
+                width: 24px;
+                height: 24px;
+                border: none;
+                background-color: transparent;
+                cursor: pointer;
+            }
 
-.title-bar-controls button:before {
-  content: 'X';
-  font-size: 18px;
-  color: white;
-}
-</style>
-</head>
-<body>
-<div id="desktop">
-  <div class="icon" style="top: 20px; left: 20px;" onclick="openWindow('weather', 'Weather', '/OS-weather/')">
-    <img src="https://win98icons.alexmeub.com/icons/png/media_player_stream_sun4.png" alt="Weather icon">
-    <div>Weather</div>
-  </div>
-  <div class="icon" style="top: 120px; left: 20px;" onclick="openWindow('kanban', 'Kanban', '/OS-kanban/')">
-    <img src="https://win98icons.alexmeub.com/icons/png/notepad_file-0.png" alt="Kanban icon">
-    <div>Kanban</div>
-  </div>
-  <div class="icon" style="top: 220px; left: 20px;" onclick="openWindow('vote', 'Vote', '/OS-vote/')">
-    <img src="https://win98icons.alexmeub.com/icons/png/world-0.png" alt="Vote icon">
-    <div>Vote</div>
-  </div>
-  <div class="icon" style="top: 320px; left: 20px;" onclick="openWindow('scores', 'Scores', '/OS-scores/')">
-    <img src="https://win98icons.alexmeub.com/icons/png/accessibility-2.png" alt="Scores icon">
-    <div>Scores</div>
-  </div>
-  <div class="icon" style="top: 420px; left: 20px;" onclick="openWindow('calc', 'Calculator', '/OS-calc/')">
-    <img src="https://win98icons.alexmeub.com/icons/png/calculator-0.png" alt="Calculator icon">
-    <div>Calculator</div>
-  </div>
-  <div class="icon" style="top: 520px; left: 20px;" onclick="openWindow('notes', 'Notes', '/OS-notes/')">
-    <img src="https://win98icons.alexmeub.com/icons/png/notepad-2.png" alt="Notes icon">
-    <div>Notes</div>
-  </div>
-</div>
+            .title-bar-controls button:before {
+                content: "X";
+                font-size: 18px;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="desktop">
+            <div
+                class="icon"
+                style="top: 20px; left: 20px"
+                onclick="openWindow('weather', 'Weather', '/OS-weather/')"
+            >
+                <img
+                    src="https://win98icons.alexmeub.com/icons/png/media_player_stream_sun4.png"
+                    alt="Weather icon"
+                />
+                <div>Weather</div>
+            </div>
+            <div
+                class="icon"
+                style="top: 120px; left: 20px"
+                onclick="openWindow('kanban', 'Kanban', '/OS-kanban/')"
+            >
+                <img
+                    src="https://win98icons.alexmeub.com/icons/png/notepad_file-0.png"
+                    alt="Kanban icon"
+                />
+                <div>Kanban</div>
+            </div>
+            <div
+                class="icon"
+                style="top: 220px; left: 20px"
+                onclick="openWindow('vote', 'Vote', '/OS-vote/')"
+            >
+                <img
+                    src="https://win98icons.alexmeub.com/icons/png/world-0.png"
+                    alt="Vote icon"
+                />
+                <div>Vote</div>
+            </div>
+            <div
+                class="icon"
+                style="top: 320px; left: 20px"
+                onclick="openWindow('scores', 'Scores', '/OS-scores/')"
+            >
+                <img
+                    src="https://win98icons.alexmeub.com/icons/png/accessibility-2.png"
+                    alt="Scores icon"
+                />
+                <div>Scores</div>
+            </div>
+            <div
+                class="icon"
+                style="top: 420px; left: 20px"
+                onclick="openWindow('calc', 'Calculator', '/OS-calc/')"
+            >
+                <img
+                    src="https://win98icons.alexmeub.com/icons/png/calculator-0.png"
+                    alt="Calculator icon"
+                />
+                <div>Calculator</div>
+            </div>
+            <div
+                class="icon"
+                style="top: 520px; left: 20px"
+                onclick="openWindow('notes', 'Notes', '/OS-notes/')"
+            >
+                <img
+                    src="https://win98icons.alexmeub.com/icons/png/notepad-2.png"
+                    alt="Notes icon"
+                />
+                <div>Notes</div>
+            </div>
+                <div
+                    class="icon"
+                    style="top: 620px; left: 20px"
+                    onclick="openWindow('colortelevision', 'Color Television', 'https://colortelevision.org')"
+                >
+                    <img
+                        src="https://win98icons.alexmeub.com/icons/png/color_profile-0.png"
+                        alt="Color Television icon"
+                    />
+                    <div>Color Television</div>
+                </div>
+                <div class="icon" style="top: 720px; left: 20px;" onclick="openWindow('JAdeWii', 'JAde Wii', 'https://jadewii.com')">
+                  <img src="https://win98icons.alexmeub.com/icons/png/computer_musical_keyboard-1.png" alt="JAde Wii icon">
+                  <div>JAde Wii</div>
+                </div>
+            </div>
+        </div>
 
-<div id="taskbar">
-  <div class="taskbar-item" onclick="toggleStartMenu()">Start</div>
-</div>
+        <div id="taskbar">
+            <div class="taskbar-item" onclick="toggleStartMenu()">Start</div>
+        </div>
 
-<script>
-let zIndex = 1000;
+        <script>
+            let zIndex = 1000;
 
-function openWindow(id, title, url) {
-  const existingWindow = document.getElementById(id);
-  if (existingWindow) {
-    bringToFront(existingWindow);
-    return;
-  }
+            function openWindow(id, title, url) {
+                const existingWindow = document.getElementById(id);
+                if (existingWindow) {
+                    bringToFront(existingWindow);
+                    return;
+                }
 
-  const win = document.createElement('div');
-  win.id = id;
-  win.className = 'window';
-  win.style.width = '640px';
-  win.style.height = '480px';
-  win.style.left = '100px';
-  win.style.top = '50px';
+                const win = document.createElement("div");
+                win.id = id;
+                win.className = "window";
+                win.style.width = "640px";
+                win.style.height = "480px";
+                win.style.left = "100px";
+                win.style.top = "50px";
 
-  win.innerHTML = `
+                win.innerHTML = `
     <div class="window-header">
       <div>${title}</div>
       <button onclick="closeWindow('${id}')">X</button>
     </div>
     <div class="window-content">
-      <iframe src="${url}"></iframe>
+      <iframe src="${url}" frameborder="0"></iframe>
     </div>
   `;
 
-  document.body.appendChild(win);
-  makeWindowDraggable(win);
-  bringToFront(win);
+                document.body.appendChild(win);
+                makeWindowDraggable(win);
+                bringToFront(win);
 
-  addTaskbarItem(id, title);
-}
+                addTaskbarItem(id, title);
+            }
 
-function closeWindow(id) {
-  const win = document.getElementById(id);
-  if (win) {
-    win.remove();
-    removeTaskbarItem(id);
-  }
-}
+            function closeWindow(id) {
+                const win = document.getElementById(id);
+                if (win) {
+                    win.remove();
+                    removeTaskbarItem(id);
+                }
+            }
 
-function makeWindowDraggable(elmnt) {
-  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  elmnt.querySelector('.window-header').onmousedown = dragMouseDown;
+            function makeWindowDraggable(elmnt) {
+                let pos1 = 0,
+                    pos2 = 0,
+                    pos3 = 0,
+                    pos4 = 0;
+                elmnt.querySelector(".window-header").onmousedown =
+                    dragMouseDown;
 
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    document.onmousemove = elementDrag;
-    bringToFront(elmnt);
-  }
+                function dragMouseDown(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    document.onmouseup = closeDragElement;
+                    document.onmousemove = elementDrag;
+                    bringToFront(elmnt);
+                }
 
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
+                function elementDrag(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+                    elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+                }
 
-  function closeDragElement() {
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
+                function closeDragElement() {
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                }
+            }
 
-function bringToFront(elmnt) {
-  elmnt.style.zIndex = ++zIndex;
-}
+            function bringToFront(elmnt) {
+                elmnt.style.zIndex = ++zIndex;
+            }
 
-function addTaskbarItem(id, title) {
-  const taskbar = document.getElementById('taskbar');
-  const item = document.createElement('div');
-  item.className = 'taskbar-item';
-  item.textContent = title;
-  item.onclick = () => {
-    const win = document.getElementById(id);
-    if (win) {
-      bringToFront(win);
-    }
-  };
-  taskbar.appendChild(item);
-}
+            function addTaskbarItem(id, title) {
+                const taskbar = document.getElementById("taskbar");
+                const item = document.createElement("div");
+                item.className = "taskbar-item";
+                item.textContent = title;
+                item.onclick = () => {
+                    const win = document.getElementById(id);
+                    if (win) {
+                        bringToFront(win);
+                    }
+                };
+                taskbar.appendChild(item);
+            }
 
-function removeTaskbarItem(id) {
-  const taskbar = document.getElementById('taskbar');
-  const items = taskbar.getElementsByClassName('taskbar-item');
-  for (let item of items) {
-    if (item.textContent === id) {
-      taskbar.removeChild(item);
-      break;
-    }
-  }
-}
+            function removeTaskbarItem(id) {
+                const taskbar = document.getElementById("taskbar");
+                const items = taskbar.getElementsByClassName("taskbar-item");
+                for (let item of items) {
+                    if (item.textContent === id) {
+                        taskbar.removeChild(item);
+                        break;
+                    }
+                }
+            }
 
-function toggleStartMenu() {
-  // Implement start menu functionality here
-  alert('Start menu clicked!');
-}
-</script>
-</body></html>
+            function toggleStartMenu() {
+                // Implement start menu functionality here
+                alert("Start menu clicked!");
+            }
+        </script>
+    </body>
+</html>
