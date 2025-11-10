@@ -16,15 +16,20 @@
             }
             #desktop {
                 background-color: #008080;
-                height: 100vh;
-                position: relative;
+                height: calc(100% - 40px);
+                display: flex;
+                flex-wrap: wrap;
+                align-content: flex-start;
+                padding: 20px;
+                box-sizing: border-box;
+                overflow: auto;
             }
             .icon {
                 width: 75px;
                 text-align: center;
                 color: white;
-                position: absolute;
                 cursor: pointer;
+                margin: 20px;
             }
             .icon img {
                 width: 32px;
@@ -47,10 +52,11 @@
                 justify-content: space-between;
                 align-items: center;
                 color: white;
+                height: 30px;
             }
             .window-content {
                 padding: 10px;
-                height: calc(100% - 40px);
+                height: calc(100% - 30px);
                 box-sizing: border-box;
             }
             .window h3 {
@@ -72,6 +78,8 @@
                 padding: 2px;
                 display: flex;
                 border-top: 2px solid #fff;
+                z-index: 10000;
+                height: 40px;
             }
             .taskbar-item {
                 padding: 2px 5px;
@@ -110,11 +118,10 @@
             }
         </style>
     </head>
-    <div>
+    <body>
         <div id="desktop">
             <div
                 class="icon"
-                style="top: 20px; left: 20px"
                 onclick="openWindow('weather', 'Weather', '/OS-weather/')"
             >
                 <img
@@ -125,7 +132,6 @@
             </div>
             <div
                 class="icon"
-                style="top: 120px; left: 20px"
                 onclick="openWindow('kanban', 'Kanban', '/OS-kanban/')"
             >
                 <img
@@ -136,7 +142,6 @@
             </div>
             <div
                 class="icon"
-                style="top: 220px; left: 20px"
                 onclick="openWindow('vote', 'Vote', '/OS-vote/')"
             >
                 <img
@@ -147,7 +152,6 @@
             </div>
             <div
                 class="icon"
-                style="top: 320px; left: 20px"
                 onclick="openWindow('scores', 'Scores', '/OS-scores/')"
             >
                 <img
@@ -158,7 +162,6 @@
             </div>
             <div
                 class="icon"
-                style="top: 420px; left: 20px"
                 onclick="openWindow('calc', 'Calculator', '/OS-calc/')"
             >
                 <img
@@ -169,7 +172,6 @@
             </div>
             <div
                 class="icon"
-                style="top: 520px; left: 20px"
                 onclick="openWindow('notes', 'Notes', '/OS-notes/')"
             >
                 <img
@@ -180,7 +182,6 @@
             </div>
                 <div
                     class="icon"
-                    style="top: 620px; left: 20px"
                     onclick="openWindow('colortelevision', 'Color Television', 'https://colortelevision.org')"
                 >
                     <img
@@ -189,13 +190,12 @@
                     />
                     <div>Color Television</div>
                 </div>
-                <div class="icon" style="top: 720px; left: 20px;" onclick="openWindow('JAdeWii', 'JAde Wii', 'https://jadewii.com')">
+                <div class="icon" onclick="openWindow('JAdeWii', 'JAde Wii', 'https://jadewii.com')">
                   <img src="https://win98icons.alexmeub.com/icons/png/computer_musical_keyboard-1.png" alt="JAde Wii icon">
                   <div>JAde Wii</div>
                 </div>
                 <div
                     class="icon"
-                    style="top: 820px; left: 20px"
                     onclick="openWindow('roughsketchep', 'Rough Sketch EP', '/RSWA/')"
                 >
                     <img
@@ -205,15 +205,13 @@
                     <div>Rough Sketch EP</div>
                 </div>
             </div>
-        </div>
-    </div>
 
         <div id="taskbar">
             <div class="taskbar-item" onclick="toggleStartMenu()">Start</div>
         </div>
 
         <script>
-            let zIndex = 1000;
+            let zIndex = 10001;
 
             function openWindow(id, title, url) {
                 const existingWindow = document.getElementById(id);
@@ -291,7 +289,7 @@
             }
 
             function bringToFront(elmnt) {
-                elmnt.style.zIndex = ++zIndex;
+                elmnt.style.zIndex = zIndex++;
             }
 
             function addTaskbarItem(id, title) {
@@ -299,6 +297,7 @@
                 const item = document.createElement("div");
                 item.className = "taskbar-item";
                 item.textContent = title;
+                item.id = id + "-taskbar";
                 item.onclick = () => {
                     const win = document.getElementById(id);
                     if (win) {
@@ -312,7 +311,7 @@
                 const taskbar = document.getElementById("taskbar");
                 const items = taskbar.getElementsByClassName("taskbar-item");
                 for (let item of items) {
-                    if (item.textContent === id) {
+                    if (item.id === id + "-taskbar") {
                         taskbar.removeChild(item);
                         break;
                     }
